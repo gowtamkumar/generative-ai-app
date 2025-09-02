@@ -1,0 +1,14 @@
+# production build stage
+FROM node:22.16.0-alpine AS builder
+
+WORKDIR /app
+COPY package*.json yarn.lock ./
+RUN yarn install
+COPY . .
+RUN yarn run build
+
+# We don't need http-server, as Nginx is handling this.
+FROM nginx:alpine
+COPY --from=builder /app/build /usr/share/nginx/html
+
+EXPOSE 80

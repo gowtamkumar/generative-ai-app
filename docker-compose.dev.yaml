@@ -1,0 +1,71 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: gowtampaul1995@
+      POSTGRES_DB: generative_ai_app_db
+      TZ: "GMT"
+      PGTZ: "GMT"
+    ports:
+      - "5544:5432" # external:internal
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - main_network
+
+  pgadmin:
+    container_name: pgadmin_generative_ai
+    image: dpage/pgadmin4:latest
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=gowtampaul0@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=gowtampaul1995@
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - main_network
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: server_app
+    env_file:
+      - ./server/.env.development
+    ports:
+      - "3900:3900"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    depends_on:
+      - postgres
+    networks:
+      - main_network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: client_app
+    ports:
+      - "3100:3100"
+    env_file:
+      - ./client/.env.local
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    depends_on:
+      - server
+    networks:
+      - main_network
+
+networks:
+  main_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
