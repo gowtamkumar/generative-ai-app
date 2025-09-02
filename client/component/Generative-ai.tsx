@@ -58,7 +58,7 @@ function ChatGPTWithCode() {
   };
 
   return (
-    <div className=" max-w-6xl mx-auto flex flex-col h-screen bg-gray-50">
+    <div className=" max-w-7xl mx-auto flex flex-col h-screen bg-gray-50">
       <div className="flex-1 overflow-y-auto p-6 space-y-4">
         {messages.map((msg: { role: string; content: any; }, idx: Key | null | undefined) => (
           <div
@@ -66,7 +66,7 @@ function ChatGPTWithCode() {
             className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
-              className={`px-4 py-2 rounded-lg ${msg.role === "user"
+              className={`whitespace-pre px-4 py-2 rounded-lg ${msg.role === "user"
                 ? "bg-blue-500 text-white rounded-br-none"
                 : "bg-gray-200 text-gray-900 rounded-bl-none"
                 }`}

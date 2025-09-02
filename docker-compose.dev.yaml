@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: postgres_db
+    container_name: generative_ai_postgres_db
     restart: always
     environment:
       POSTGRES_USER: admin
@@ -10,7 +10,7 @@ services:
       TZ: "GMT"
       PGTZ: "GMT"
     ports:
-      - "5544:5432" # external:internal
+      - "5545:5432" # external:internal
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -37,7 +37,7 @@ services:
     env_file:
       - ./server/.env.development
     ports:
-      - "3900:3900"
+      - "5000:5000"
     volumes:
       - ./server:/app
       - /app/node_modules
@@ -52,7 +52,7 @@ services:
       dockerfile: Dockerfile
     container_name: client_app
     ports:
-      - "3100:3100"
+      - "3000:3000"
     env_file:
       - ./client/.env.local
     volumes:
